@@ -5,8 +5,10 @@ const Catalogo = use('App/Models/Catalogo')
 
 class UserController {
   async login ({ request, auth }) {
-    const user = await User.first({ matricula: "ES81841" })
-    return await auth.withRefreshToken().generate(user)
+    const user = await User.findBy('email', request.post().email )
+    const resposta = await auth.withRefreshToken().generate(user)
+    resposta.user = user
+    return resposta
   }
 
   async teste ({ request, auth }) {

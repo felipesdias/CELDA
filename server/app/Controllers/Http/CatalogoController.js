@@ -3,12 +3,17 @@
 const Catalogo = use('App/Models/Catalogo')
 
 class CatalogoController {
-  async create ({ request }) {
+    async store ({ request }) {
+        return await Catalogo.create(request.only(['nome']))
+    }
 
-    const catalogoData = request.only(['nome'])
+    async update ({ request, params }) {
+        return Catalogo.query().where('id', params.id).update(request.only(['nome']))
+    }
 
-    return await Catalogo.create(catalogoData)
-  }
+    async destroy ({ params }) {
+        return await Catalogo.query().where('id', params.id).delete()
+    }
 }
 
 
