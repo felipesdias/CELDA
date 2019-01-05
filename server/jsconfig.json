@@ -1,0 +1,12 @@
+{
+    "exclude": [
+        "node_modules",
+        "node_modules/",
+        "node_modules/*",
+        "dist",
+        "package-lock.json",
+        "quasar",
+        "GCOcert.pfx",
+        "gcoConstants.example.js"
+    ]
+}
