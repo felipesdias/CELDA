@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "baseUrl": "",
+        "paths": {
+            "app/*": ["./"],
+            "src/*": ["./src/*"],
+            "components/*": ["./src/components/*"],
+            "layouts/*": ["./src/layouts/*"],
+            "pages/*": ["./src/pages/*"],
+            "assets/*": ["./src/assets/*"],
+            "plugins/*": ["./src/plugins/*"]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "node_modules/",
+        "node_modules/*",
+        "dist",
+        "package-lock.json",
+        "quasar",
+        "GCOcert.pfx",
+        "gcoConstants.example.js"
+    ]
+}

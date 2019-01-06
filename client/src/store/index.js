@@ -11,11 +11,11 @@ Vue.use(Vuex);
  */
 
 export default function (/* { ssrContext } */) {
-  const Store = new Vuex.Store({
-    modules: {
-      example,
-    },
-  });
+    const Store = new Vuex.Store({
+        modules: {
+            example,
+        },
+    });
 
-  return Store;
+    return Store;
 }
