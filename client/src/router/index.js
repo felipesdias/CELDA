@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { SessionStorage } from 'quasar';
 
 import routes from './routes';
 
@@ -20,6 +21,18 @@ export default function (/* { store, ssrContext } */) {
         // quasar.conf.js -> build -> publicPath
         mode: process.env.VUE_ROUTER_MODE,
         base: process.env.VUE_ROUTER_BASE,
+    });
+
+    Router.beforeEach((to, from, next) => {
+        if (to.matched.some(record => record.meta.auth)) {
+            if (SessionStorage.has('token'))
+                next();
+            else {
+                SessionStorage.clear();
+                next('/login');
+            }
+        }
+        else next();
     });
 
     return Router;

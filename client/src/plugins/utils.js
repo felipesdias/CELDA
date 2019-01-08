@@ -14,6 +14,13 @@ const utils = {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
+    },
+    errorMsg (field, item) {
+        if (!item.$error) return ''
+        if (!item.required) return `${field} é obrigatório`
+        if (!item.minLength) return `${field} deve ter no mínimo ${item.$params.minLength.min} caracteres`
+        if (!item.maxLength) return `must not be more than ${item.$params.maxLength.max} characters long`
+        return `${field} é inválido`;
     }
 }
 

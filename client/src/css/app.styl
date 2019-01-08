@@ -18,21 +18,21 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--q-color-cg-bg-top-submenu);
+  background: var(--q-color-primary);
   // border-left: 1px solid rgba(0,0,0,.1);
   border-radius: 100px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--q-color-cg-color-text-default);
+  background: var(--q-color-primary);
   border-radius: 100px;
   width: 90%;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--q-color-cg-color-text-default);
+  background: var(--q-color-tertiary);
   border-radius: 100px;
 }
 
@@ -50,17 +50,18 @@
 }
 
 
-.q-field-bottom {
-    padding-bottom: 8px;
-    padding-top: 0px;
-  }
 
 .celda-input {
   transition: all 0.45s;
+  
+    .q-field-bottom {
+        padding-bottom: 8px;
+        padding-top: 0px;
+    }
 
   .q-if-label-above {
     background: white;
-    color: var(--q-color-primary)!important;
+    color: var(--q-color-primary);
     transform: translate(-3px, -90%) !important;
     padding: 0px 3px;
   }
@@ -92,7 +93,6 @@
 .celda-input:not(.q-popover):not(.q-checkbox) {
   border: 1px solid;
   border-radius: 2px;
-  color: var(--q-color-primary) !important;
 
   &:focus-within {
     border: 1px solid var(--q-color-secondary);

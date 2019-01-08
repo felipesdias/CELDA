@@ -3,6 +3,10 @@
 const Catalogo = use('App/Models/Catalogo')
 
 class CatalogoController {
+    async indexAll ({ request }) {
+        return await Catalogo.all()
+    }
+
     async store ({ request }) {
         return await Catalogo.create(request.only(['nome']))
     }

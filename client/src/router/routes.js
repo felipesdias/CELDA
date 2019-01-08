@@ -1,15 +1,29 @@
 
 const routes = [
     {
-        path: 'celda',
+        path: '/',
         component: () => import('layouts/Celda-Layout'),
         meta: { auth: true },
         children: [
-
+            {
+                path: '/alunos',
+                name: 'alunos',
+                component: () => import('pages/Alunos.vue'),
+            },
+            {
+                path: '/detalheAluno/:alunoId',
+                name: 'detalheAluno',
+                component: () => import('pages/DetalheAluno.vue'),
+            },
+            {
+                path: '/catalogos',
+                name: 'catalogos',
+                component: () => import('pages/Catalogos.vue'),
+            }
         ]
     },
     {
-        path: '/',
+        path: '/login',
         name: 'login',
         component: () => import('pages/Login.vue'),
     },

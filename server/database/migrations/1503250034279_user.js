@@ -7,7 +7,7 @@ class UserSchema extends Schema {
   up () {
     this.create('users', (table) => {
       table.increments()
-      table.integer('catalogo_id').unsigned().references('id').inTable('catalogo')
+      table.integer('catalogo_id').unsigned().references('id').inTable('catalogos')
       table.string('nome', 190).notNullable().index()
       table.string('matricula', 15).notNullable().unique()
       table.string('tipo', 20).notNullable().index()

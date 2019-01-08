@@ -7,7 +7,7 @@ class TiposAtividadesSchema extends Schema {
   up () {
     this.create('tipos_atividades', (table) => {
       table.increments()
-      table.integer('catalogo_id').notNullable().unsigned().references('id').inTable('catalogo')
+      table.integer('catalogo_id').notNullable().unsigned().references('id').inTable('catalogos')
       table.string('nome', 300).notNullable().index()
       table.string('descricao', 1000).notNullable().index()
       table.integer('ordem').notNullable()

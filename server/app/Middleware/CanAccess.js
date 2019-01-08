@@ -11,7 +11,7 @@ class CanAccess {
    */
   async handle ({ response, auth }, next, properties) {
     const user = await auth.getUser()
-    if (properties.findIndex(x => x === user.tipo) === -1) {
+    if (!properties.includes(user.tipo)) {
         response.unauthorized({ message: 'Não autorizado' })
     } else {
         // call next to advance the request

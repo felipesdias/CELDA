@@ -6,6 +6,8 @@ module.exports = ctx => ({
         'axios',
         'filters',
         'utils',
+        'directives',
+        'vuelidate'
     ],
     css: [
         'app.styl',
@@ -47,9 +49,18 @@ module.exports = ctx => ({
             },
         },
         components: [
+            'QPage',
             'QInput',
             'QBtn',
-            'QCard'
+            'QCard',
+            'QField',
+            'QLayoutHeader',
+            'QToolbar',
+            'QLayoutFooter',
+            'QToolbarTitle',
+            'QPageContainer',
+            'QLayout',
+            'QTable'
         ],
         directives: [
             'Ripple',
@@ -59,7 +70,7 @@ module.exports = ctx => ({
         plugins: [
             'Notify',
             'LoadingBar',
-            'Loading',
+            'SessionStorage'
         ],
         // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
         i18n: 'pt-br', // Quasar language

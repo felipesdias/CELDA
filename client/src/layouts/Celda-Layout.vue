@@ -1,35 +1,20 @@
 <template>
-  <q-layout view="hHh LpR fff" class="cg-bg-main">
+  <q-layout view="hHh LpR fff">
     <!-- Header Layout -->
     <q-layout-header>
       <q-toolbar 
-        class="row q-pa-none cg-bg-top-menu" 
+        class="row" 
         reveal>
-        <div class="row fit">
-          <!-- Clock and logo left -->
-          <div class="row">
-            <img 
-              style="padding: 17.5px 10px; box-sizing: content-box;"
-              src="statics/logo_vale_img.png" 
-              width="30" 
-              height="26"
-            >
-            <div class="q-ml-sm relogio row items-center cg-color-text-clock">
-              {{ horaAtual }}
-            </div>
-
-          </div>
-
-          <kpis/>
-
-          <div class="col"/>
-          <!-- Top menu -->
-          <div class="row">
-            <header-menu/>
-            <div class="q-mx-md"/>
-            <notifications />
-            <profile-context />
-          </div>
+        <q-toolbar-title class="text-center">
+          CELDA
+        </q-toolbar-title>
+        <div class="row justify-end">
+          <q-btn flat color="tertiary" 
+                 icon="fa fa-users" @click="$router.push({ name: 'alunos' })"/>
+          <q-btn flat color="tertiary" 
+                 icon="fa fa-clipboard" @click="$router.push({ name: 'catalogos' })"/>
+          <q-btn flat color="tertiary" 
+                 icon="fa fa-sign-out-alt" @click="sair"/>
         </div>
 
       </q-toolbar>
@@ -39,8 +24,8 @@
     <q-layout-footer>
       <q-toolbar>
         <q-toolbar-title class="text-center">
-          Accenture @2018
-          <span slot="subtitle">GCO</span>
+          CELDA - Controle e Lançamento de Atividades
+          <span slot="subtitle"> {{ msgFooter }}</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-footer>
@@ -58,6 +43,18 @@
 <script>
 export default {
     name: 'CeldaLayout',
+    data() {
+        return {
+            msgFooter: 'Developed by Felipe de Souza Dias <felipe.s.dias@outlook.com>',
+            busca: ''
+        }
+    },
+    methods: {
+        sair() {
+            this.$q.sessionStorage.clear();
+            this.$router.push('login');
+        }
+    }
 }
 </script>
 

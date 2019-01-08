@@ -5,8 +5,9 @@ const Catalogo = use('App/Models/Catalogo')
 
 class UserController {
   async login ({ request, auth }) {
-    const user = await User.findBy('email', request.post().email )
-    const resposta = await auth.withRefreshToken().generate(user)
+    const user = await User.findBy('matricula', request.post().matricula)
+    user.catalogo = await user.catalogo().fetch()
+    const resposta = await auth.generate(user)
     resposta.user = user
     return resposta
   }

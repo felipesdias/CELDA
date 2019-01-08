@@ -23,12 +23,17 @@ Route.get('/', () => {
 Route.get('/teste', 'UserController.teste').middleware('auth')
 
 Route.group(() => {
+    Route.get('/aluno', 'AlunoController.indexAll')
+}).middleware(['auth', 'canAccess:adm,aux'])
+
+Route.group(() => {
     Route.put('/atividade/:id', 'AtividadeController.update').validator('StoreAtividade')
     Route.delete('/atividade/:id', 'AtividadeController.destroy').validator('StoreAtividade')
 }).middleware(['auth', 'canAccess:adm,aluno'])
 
 Route.group(() => {
     Route.post('/atividade', 'AtividadeController.store').validator('StoreAtividade')
+    Route.get('/catalogo', 'CatalogoController.indexAll')
 }).middleware(['auth', 'canAccess:adm,aluno,aux'])
 
 Route.group(() => {
@@ -43,8 +48,8 @@ Route.group(() => {
     Route.put('/disciplina/:id', 'DisciplinaController.update').validator('StoreDisciplina')
     Route.post('/disciplina', 'DisciplinaController.store').validator('StoreDisciplina')
     Route.delete('/disciplina/:id', 'DisciplinaController.destroy')
-}).middleware(['auth', 'canAccess:admin'])
+}).middleware(['auth', 'canAccess:adm'])
 
 
-Route.post('/login', 'UserController.login').middleware('guest')
-Route.post('/createUser', 'UserController.createUser').middleware('guest')
+Route.post('/login', 'UserController.login')
+Route.post('/createUser', 'UserController.createUser')

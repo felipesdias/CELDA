@@ -9,7 +9,7 @@ class AtividadesSchema extends Schema {
       table.increments()
       table.integer('user_id').notNullable().unsigned().references('id').inTable('users')
       table.integer('tipos_atividade_id').notNullable().unsigned().references('id').inTable('tipos_atividades')
-      table.integer('catalogo_id').notNullable().unsigned().references('id').inTable('catalogo')
+      table.integer('catalogo_id').notNullable().unsigned().references('id').inTable('catalogos')
       table.string('nome', 190).notNullable().index()
       table.string('comprovante', 1000).index()
       table.integer('carga_sugerida')
