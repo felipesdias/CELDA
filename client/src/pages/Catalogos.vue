@@ -12,7 +12,7 @@
       >
         <div slot="top-right" slot-scope="props">
           <q-btn  
-            round color="positive"
+            round color="secondary"
             icon="fa fa-plus" :loading="criando"
             @click.native="criarCatalogo"/>
         </div>
@@ -130,6 +130,7 @@ export default {
                 }).catch(() => {
                     this.catalogos[index].apagando = false;
                 });
+            }).catch(() => {
             });
         },
         criarCatalogo() {
@@ -158,6 +159,7 @@ export default {
                 }).catch(() => {
                     this.criando = false;
                 });
+            }).catch(() => {
             });
         }
     }

@@ -1,10 +1,10 @@
 <template>
   <q-page padding class="column">
-    <div class="row full-width justify-center q-mb-md">
+    <q-card class="row self-center q-pt-md justify-center q-mb-md" style="max-width: 1000px; width: 100%;">
       <q-input v-model="buscaAluno" class="celda-input"
                hide-underline float-label="Busca"
-               style="max-width: 400px; width: 100%;"/>
-    </div>
+               style="width: 100%; max-width: 400px;"/>
+    </q-card>
     <div class="row justify-center gutter-md self-center" style="max-width: 1000px">
       <div v-for="aluno in alunos" :key="aluno.id">
         <q-card class="q-pa-sm box-aluno cursor-pointer" @click.native="detalhesAluno(aluno)">

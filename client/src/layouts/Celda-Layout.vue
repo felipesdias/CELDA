@@ -8,12 +8,12 @@
         <q-toolbar-title class="text-center">
           CELDA
         </q-toolbar-title>
-        <div class="row justify-end">
-          <q-btn flat color="tertiary" 
+        <div class="row icones-header">
+          <q-btn flat color="white" 
                  icon="fa fa-users" @click="$router.push({ name: 'alunos' })"/>
-          <q-btn flat color="tertiary" 
-                 icon="fa fa-clipboard" @click="$router.push({ name: 'catalogos' })"/>
-          <q-btn flat color="tertiary" 
+          <q-btn flat color="white" 
+                 icon="fa fa-clipboard-list" @click="$router.push({ name: 'catalogos' })"/>
+          <q-btn flat color="white" 
                  icon="fa fa-sign-out-alt" @click="sair"/>
         </div>
 
@@ -58,5 +58,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.icones-header {
+    position: absolute;
+    right: 12px;
+}
 </style>
