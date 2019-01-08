@@ -60,7 +60,9 @@ module.exports = ctx => ({
             'QToolbarTitle',
             'QPageContainer',
             'QLayout',
-            'QTable'
+            'QTable',
+            'QTr',
+            'QTd'
         ],
         directives: [
             'Ripple',
@@ -70,7 +72,8 @@ module.exports = ctx => ({
         plugins: [
             'Notify',
             'LoadingBar',
-            'SessionStorage'
+            'SessionStorage',
+            'Dialog'
         ],
         // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
         i18n: 'pt-br', // Quasar language
