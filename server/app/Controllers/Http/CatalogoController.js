@@ -3,8 +3,16 @@
 const Catalogo = use('App/Models/Catalogo')
 
 class CatalogoController {
-    async indexAll ({ request }) {
+    async indexAll () {
         return await Catalogo.all()
+    }
+
+    async index ({ params }) {
+        return await Catalogo.query()
+                        .with('disciplinas')
+                        .with('tiposAtividades')
+                        .where('id', params.id)
+                        .first()
     }
 
     async store ({ request }) {

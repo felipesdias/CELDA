@@ -73,9 +73,9 @@ export default {
                 this.$q.sessionStorage.set('user', response.user);
                 this.loader.login = false;
 
-                if(response.user.tipo === 'adm')
+                if(response.user.tipo === 'adm' || response.user.tipo === 'aux')
                     this.$router.push({ name: 'alunos' });
-                if(response.user.tipo === 'aluno')
+                else if(response.user.tipo === 'aluno')
                     this.$router.push({ name: 'detalheAluno', params: { alunoId: response.user.id }});
             }).catch(() => {
                 this.loader.login = false;

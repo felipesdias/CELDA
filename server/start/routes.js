@@ -23,20 +23,6 @@ Route.get('/', () => {
 Route.get('/teste', 'UserController.teste').middleware('auth')
 
 Route.group(() => {
-    Route.get('/aluno', 'AlunoController.indexAll')
-}).middleware(['auth', 'canAccess:adm,aux'])
-
-Route.group(() => {
-    Route.put('/atividade/:id', 'AtividadeController.update').validator('StoreAtividade')
-    Route.delete('/atividade/:id', 'AtividadeController.destroy').validator('StoreAtividade')
-}).middleware(['auth', 'canAccess:adm,aluno'])
-
-Route.group(() => {
-    Route.post('/atividade', 'AtividadeController.store').validator('StoreAtividade')
-    Route.get('/catalogo', 'CatalogoController.indexAll')
-}).middleware(['auth', 'canAccess:adm,aluno,aux'])
-
-Route.group(() => {
     Route.put('/catalogo/:id', 'CatalogoController.update').validator('StoreCatalogo')
     Route.post('/catalogo', 'CatalogoController.store').validator('StoreCatalogo')
     Route.delete('/catalogo/:id', 'CatalogoController.destroy')
@@ -50,6 +36,22 @@ Route.group(() => {
     Route.delete('/disciplina/:id', 'DisciplinaController.destroy')
 }).middleware(['auth', 'canAccess:adm'])
 
+Route.group(() => {
+    Route.get('/aluno', 'AlunoController.indexAll')
+    Route.post('/aluno', 'AlunoController.store').validator('StoreAluno')
+    Route.put('/atividade/:id/confirma', 'AtividadeController.confirmar')
+    Route.put('/atividade/:id/desconfirma', 'AtividadeController.desconfirmar')
+}).middleware(['auth', 'canAccess:adm,aux'])
+
+Route.group(() => {
+    Route.put('/atividade/:id', 'AtividadeController.update').validator('StoreAtividade')
+    Route.delete('/atividade/:id', 'AtividadeController.destroy')
+    Route.post('/atividade', 'AtividadeController.store').validator('StoreAtividade')
+    Route.get('/catalogo', 'CatalogoController.indexAll')
+    Route.get('/catalogo/:id', 'CatalogoController.index')
+    Route.put('/aluno/:id/catalogo', 'AlunoController.changeCatalogo')
+    Route.post('/file/:id', 'AlunoController.uploadFile')
+    Route.get('/aluno/:id', 'AlunoController.index')
+}).middleware(['auth', 'canAccess:adm,aluno,aux'])
 
 Route.post('/login', 'UserController.login')
-Route.post('/createUser', 'UserController.createUser')

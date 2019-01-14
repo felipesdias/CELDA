@@ -1,5 +1,11 @@
 // app global css
 
+pre {
+    white-space: pre-line;
+    font-family: unset;
+    margin: 0px;
+}
+
 .modal-content .q-card .q-card-main {
   max-height: 65vh !important;
   overflow: auto;
@@ -49,13 +55,16 @@
   opacity: 0;
 }
 
-
+.btn-cancelar {
+    background: #e4e1e1 !important;
+    color: black !important;
+}
 
 .celda-input {
   transition: all 0.45s;
   
     .q-field-bottom {
-        padding-bottom: 8px;
+        padding-bottom: 0px;
         padding-top: 0px;
     }
 
@@ -101,7 +110,7 @@
 }
 
 .celda-input:not(.q-popover) {
-  margin: 0px 0px 16px 0px;
+  margin: 0px;
 }
 
 .celda-input.q-checkbox {
@@ -110,6 +119,7 @@
 
 .celda-input.q-if-standard.q-if-has-label {
   padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .q-table-container, .q-card {

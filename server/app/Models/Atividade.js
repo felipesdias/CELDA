@@ -15,6 +15,10 @@ class Atividade extends Model {
   tipoAtividade () {
     return this.belongsTo('App/Models/TiposAtividade')
   }
+
+  comprovante() {
+    return this.hasOne('App/Models/File')
+  }
 }
 
 module.exports = Atividade

@@ -12,46 +12,112 @@
       >
         <div slot="top-right" slot-scope="props">
           <q-btn  
+            size="xs"
             round color="secondary"
-            icon="fa fa-plus" :loading="criando"
-            @click.native="criarCatalogo"/>
+            icon="fa fa-plus"
+            @click="criar.modal = true"/>
         </div>
         <q-tr slot="body" slot-scope="props" 
               :props="props" class="linha-tabela"
         >
-          <q-td key="id" :props="props" 
-                class="cursor-pointer" @click.native="detalheCatalogo(props.row)">{{ props.row.id }}</q-td>
-          <q-td key="nome" :props="props" 
-                class="cursor-pointer" @click.native="detalheCatalogo(props.row)">{{ props.row.nome }}</q-td>
-          <q-td key="created" :props="props" 
-                class="cursor-pointer" @click.native="detalheCatalogo(props.row)">{{ props.row.created }}</q-td>
+          <q-td key="id" :props="props">{{ props.row.id }}</q-td>
+          <q-td key="nome" :props="props">{{ props.row.nome }}</q-td>
+          <q-td key="created_at" :props="props">{{ props.row.created | formatDate('DATE') }}</q-td>
           <q-td key="acoes" :props="props">
-            <q-btn size="sm" flat 
+            <q-btn size="xs" class="q-mr-sm"
+                   round color="primary"
+                   icon="fa fa-edit"
+                   @click="detalheCatalogo(props.row)"/>
+            <q-btn size="xs" 
                    round color="negative"
                    icon="fa fa-trash"
-                   :loading="props.row.apagando"
-                   @click.native="apagarCatalogo(props.row)"/>
+                   @click="abrirModalApagar(props.row)"/>
           </q-td>
         </q-tr>
       </q-table>
     </div>
+
+    <q-modal v-model="apagar.modal" minimized>
+      <q-card >
+        <q-card-title class="q-pr-lg">
+          Apagar catálogo
+        </q-card-title>
+        <q-card-separator />
+        <q-card-main>
+          Todos os dados relacionados a este catálogo serão perdidos. Deseja realmente apagar ?
+        </q-card-main>
+        <q-card-separator />
+        <q-card-actions class="row justify-end q-px-md">
+          <q-btn 
+            label="Cancelar" @click="apagar.modal = false" 
+            class="btn-cancelar"
+          />
+          <q-btn 
+            label="Apagar" @click="apagarCatalogo" 
+            color="primary" 
+            :loading="apagar.loader" />
+        </q-card-actions>
+      </q-card>
+    </q-modal>
+
+    <q-modal v-model="criar.modal" minimized>
+      <q-card >
+        <q-card-title class="q-pr-lg">
+          Criar catálogo
+        </q-card-title>
+        <q-card-separator />
+        <q-card-main>
+          <q-field :error="$v.criar.nome.$error"
+                   :error-label="$utils.errorMsg('Nome', $v.criar.nome)">
+            <q-input v-model="criar.nome" 
+                     float-label="Nome" 
+                     hide-underline
+                     class="celda-input"
+                     @blur="$v.criar.nome.$touch"
+                     @keyup.enter="criarCatalogo"/>
+          </q-field>
+        </q-card-main>
+        <q-card-separator />
+        <q-card-actions class="row justify-end q-px-md">
+          <q-btn 
+            label="Cancelar" @click="criar.modal = false" 
+            class="btn-cancelar"
+          />
+          <q-btn 
+            label="Criar" @click="criarCatalogo" 
+            color="primary" 
+            :loading="criar.loader" />
+        </q-card-actions>
+      </q-card>
+    </q-modal>
+
   </q-page>
 </template>
 
 <script>
+import { required, minLength } from 'vuelidate/lib/validators'
 import moment from 'moment';
 
 export default {
     name: 'Catalogos',
     data() {
         return {
+            apagar: {
+                modal: false,
+                loader: false,
+                item: {},
+            },
+            criar: {
+                modal: false,
+                loader: false,
+                nome: '',
+            },
             carregando: false,
             catalogos: [],
-            criando: false,
             pagination: {
-                sortBy: 'id', // String, column "name" property value
+                sortBy: '',
                 descending: true,
-                rowsPerPage: 0 // current rows per page being displayed
+                rowsPerPage: 0
             },
             columns: [
                 {
@@ -71,21 +137,34 @@ export default {
                     sortable: true
                 },
                 {
-                    name: 'created',
+                    name: 'created_at',
                     required: true,
                     label: 'Criado em',
                     align: 'left',
-                    field: 'created',
+                    field: 'created_at',
                     sortable: true
                 },
                 {
                     name: 'acoes',
                     label: 'Ações',
-                    align: 'left',
+                    align: 'center',
                     field: 'acoes',
                     sortable: false
                 }
             ]
+        }
+    },
+    validations: {
+        criar: {
+            nome: {
+                required,
+                minLength: minLength(3)
+            },
+        }
+    },
+    watch: {
+        'criar.modal': function nome() {
+            this.nome = '';
         }
     },
     computed: {
@@ -97,11 +176,7 @@ export default {
         this.carregando = true;
 
         this.$axios.get('catalogo').then(response => {
-            this.catalogos = response.map(item => {
-                item.created = moment(item.crated_at).format('DD/MM/YYYY');
-                item.apagando = false;
-                return item;
-            });
+            this.catalogos = response;
             this.carregando = false;
         }).catch(() => {
             this.carregando = false;
@@ -109,57 +184,48 @@ export default {
     },
     methods: {
         detalheCatalogo(catalogo) {
-            
+            this.$router.push({ name: 'detalheCatalogo', params: { catalogoId: catalogo.id }});
         },
-        apagarCatalogo(catalogo) {
-            this.$q.dialog({
-                title: 'Apagar catálogo',
-                message: 'Todos os dados relacionados a este catálogo serão perdidos. Deseja realmente apagar ?',
-                ok: 'Sim',
-                cancel: 'Cancelar'
-            }).then(() => {
-                const index = this.catalogos.findIndex(item => item.id === catalogo.id);
-                this.catalogos[index].apagando = true;
-                this.$axios.delete(`catalogo/${catalogo.id}`).then(response => {
-                    this.$q.notify({
-                        message: `Número de catálogos apagados: ${response}`,
-                        icon: 'fa fa-trash',
-                        color: 'primary'
-                    });
-                    this.catalogos.splice(index, 1);
-                }).catch(() => {
-                    this.catalogos[index].apagando = false;
+        abrirModalApagar(catalogo) {
+            this.apagar.item = catalogo;
+            this.apagar.modal = true;
+        },
+        apagarCatalogo() {
+            this.apagar.loader = true;
+            const index = this.catalogos.findIndex(item => item.id === this.apagar.item.id);
+            this.$axios.delete(`catalogo/${this.apagar.item.id}`).then(response => {
+                this.$q.notify({
+                    message: `Número de catálogos apagados: ${response}`,
+                    icon: 'fa fa-trash',
+                    color: 'primary'
                 });
+                this.catalogos.splice(index, 1);
+                this.apagar.loader = false;
+                this.apagar.modal = false;
             }).catch(() => {
+                this.apagar.loader = false;
             });
         },
         criarCatalogo() {
-            this.$q.dialog({
-                title: 'Novo catálogo',
-                message: 'Defina um nome para o catálogo.',
-                prompt: {
-                    model: '',
-                    type: 'text',
-                    label: 'Teste'
-                },
-                cancel: true,
-                color: 'primary'
-            }).then(data => {
-                this.criando = true;
-                this.$axios.post('catalogo', { nome: data }).then(response => {
-                    this.$q.notify({
-                        message: 'Catálogo criado com sucesso',
-                        icon: 'fa fa-thumbs-up',
-                        color: 'primary'
-                    });
-                    this.criando = false;
-                    response.created = moment(response.crated_at).format('DD/MM/YYYY');
-                    response.apagando = false;
-                    this.catalogos.unshift(response);
-                }).catch(() => {
-                    this.criando = false;
+            this.$v.criar.$touch();
+
+            if (this.$v.criar.$error) {
+                this.$q.notify('Verifique os campos novamente!');
+                return;
+            }
+
+            this.criar.loader = true;
+            this.$axios.post('catalogo', { nome: this.criar.nome }).then(response => {
+                this.$q.notify({
+                    message: 'Catálogo criado com sucesso',
+                    icon: 'fa fa-thumbs-up',
+                    color: 'primary'
                 });
+                this.criar.loader = false;
+                this.criar.modal = false;
+                this.catalogos.unshift(response);
             }).catch(() => {
+                this.criar.loader = false;
             });
         }
     }

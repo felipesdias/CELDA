@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { SessionStorage } from 'quasar';
-
 import routes from './routes';
+import { verifica } from 'src/plugins/canAccess';
 
 Vue.use(VueRouter);
 
@@ -25,7 +25,7 @@ export default function (/* { store, ssrContext } */) {
 
     Router.beforeEach((to, from, next) => {
         if (to.matched.some(record => record.meta.auth)) {
-            if (SessionStorage.has('token'))
+            if (SessionStorage.has('token') && to.matched.every(record => verifica((record.meta || {}).can)))
                 next();
             else {
                 SessionStorage.clear();
@@ -33,6 +33,8 @@ export default function (/* { store, ssrContext } */) {
             }
         }
         else next();
+
+        // next('/login');
     });
 
     return Router;

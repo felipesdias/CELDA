@@ -6,14 +6,19 @@
         class="row" 
         reveal>
         <q-toolbar-title class="text-center">
-          CELDA
+          CELDA - UFV
         </q-toolbar-title>
         <div class="row icones-header">
-          <q-btn flat color="white" 
+          <q-btn v-if="$can('adm,aux')"
+                 flat color="white" 
+                 label="Alunos" class="q-mr-md"
                  icon="fa fa-users" @click="$router.push({ name: 'alunos' })"/>
-          <q-btn flat color="white" 
+          <q-btn v-if="$can('adm')"
+                 flat color="white" 
+                 label="Catálogos" class="q-mr-md"
                  icon="fa fa-clipboard-list" @click="$router.push({ name: 'catalogos' })"/>
           <q-btn flat color="white" 
+                 label="Sair"
                  icon="fa fa-sign-out-alt" @click="sair"/>
         </div>
 
@@ -52,7 +57,7 @@ export default {
     methods: {
         sair() {
             this.$q.sessionStorage.clear();
-            this.$router.push('login');
+            this.$router.push({ name: 'login' });
         }
     }
 }

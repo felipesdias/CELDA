@@ -5,10 +5,11 @@ const Schema = use('Schema')
 
 class UsuariosHasDisciplinasSchema extends Schema {
   up () {
-    this.create('usuarios_has_disciplinas', (table) => {
-      table.integer('user_id').notNullable().unsigned().references('id').inTable('users')
-      table.integer('disciplina_id').notNullable().unsigned().references('id').inTable('disciplinas')
+    this.create('disciplina_user', (table) => {
+      table.integer('user_id').notNullable().unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.integer('disciplina_id').notNullable().unsigned().references('id').inTable('disciplinas').onDelete('CASCADE')
       table.timestamps()
+      table.primary(['user_id', 'disciplina_id'])
     })
   }
 

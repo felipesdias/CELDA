@@ -6,7 +6,5 @@
         "dist",
         "package-lock.json",
         "quasar",
-        "GCOcert.pfx",
-        "gcoConstants.example.js"
     ]
 }

@@ -7,7 +7,7 @@ class DisciplinasSchema extends Schema {
   up () {
     this.create('disciplinas', (table) => {
       table.increments()
-      table.integer('catalogo_id').notNullable().unsigned().references('id').inTable('catalogos')
+      table.integer('catalogo_id').notNullable().unsigned().references('id').inTable('catalogos').onDelete('CASCADE')
       table.string('nome', 45).notNullable()
       table.integer('creditos').notNullable()
       table.timestamps()

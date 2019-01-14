@@ -9,12 +9,11 @@ class CanAccess {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle ({ response, auth }, next, properties) {
+  async handle ({ response, auth, params }, next, properties) {
     const user = await auth.getUser()
     if (!properties.includes(user.tipo)) {
         response.unauthorized({ message: 'Não autorizado' })
     } else {
-        // call next to advance the request
         await next()
     }
   }

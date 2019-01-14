@@ -17,9 +17,10 @@ const utils = {
     },
     errorMsg (field, item) {
         if (!item.$error) return ''
-        if (!item.required) return `${field} é obrigatório`
-        if (!item.minLength) return `${field} deve ter no mínimo ${item.$params.minLength.min} caracteres`
-        if (!item.maxLength) return `must not be more than ${item.$params.maxLength.max} characters long`
+        if (item.required !== undefined && !item.required) return `${field} é obrigatório`
+        if (item.minLength !== undefined && !item.minLength) return `${field} deve ter no mínimo ${item.$params.minLength.min} caracteres`
+        if (item.maxLength !== undefined && !item.maxLength) return `must not be more than ${item.$params.maxLength.max} characters long`
+        if (item.maxValue !== undefined && !item.maxValue) return `${field} deve ser menor que ${item.$params.maxValue.max}`
         return `${field} é inválido`;
     }
 }

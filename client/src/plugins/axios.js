@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SessionStorage } from 'quasar'
+import { SessionStorage, Notify } from 'quasar'
 
 export default ({ Vue }) => {
     const http = axios.create({
@@ -22,7 +22,31 @@ export default ({ Vue }) => {
 
     http.interceptors.response.use(
         response => response.data,
-        error => Promise.reject(error)
+        error => {
+            if(error && error.response && error.response.status === 401) {
+                SessionStorage.clear();
+                Notify.create({
+                    message: 'Não autorizado!',
+                });
+            }
+            else if(error && error.response && error.response.data &&  error.response.data.informar) {
+                Notify.create({
+                    message: error.response.data.informar,
+                });
+            }
+            else if(error && error.response && error.response.data && Array.isArray(error.response.data)) {
+                Notify.create({
+                    message: error.response.data[0].message,
+                });
+            }
+            else {
+                Notify.create({
+                    message: 'Erro interno do servidor!',
+                });
+            }
+
+            return Promise.reject(error)
+        }
     );
 
     Vue.prototype.$axios = http;

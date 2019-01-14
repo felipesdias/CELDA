@@ -3,6 +3,10 @@
 const Disciplina = use('App/Models/Disciplina')
 
 class DisciplinaController {
+    async indexAll() {
+        return await Disciplina.all()
+    }
+
     async store ({ request }) {
         return await Disciplina.create(request.only(['catalogo_id', 'nome', 'creditos']))
     }
