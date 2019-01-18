@@ -38,6 +38,10 @@ export default ({ Vue }) => {
                 Notify.create({
                     message: error.response.data[0].message,
                 });
+            } else if(error && error.response && error.response.data && 'clientName' in error.response.data && 'message' in error.response.data && 'fieldName' in error.response.data) {
+                Notify.create({
+                    message: error.response.data.message,
+                });
             }
             else {
                 Notify.create({

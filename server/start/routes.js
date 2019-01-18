@@ -34,6 +34,8 @@ Route.group(() => {
     Route.put('/disciplina/:id', 'DisciplinaController.update').validator('StoreDisciplina')
     Route.post('/disciplina', 'DisciplinaController.store').validator('StoreDisciplina')
     Route.delete('/disciplina/:id', 'DisciplinaController.destroy')
+
+    Route.put('aluno/:id/finalizar', 'AlunoController.finalizar')
 }).middleware(['auth', 'canAccess:adm'])
 
 Route.group(() => {
@@ -52,6 +54,9 @@ Route.group(() => {
     Route.put('/aluno/:id/catalogo', 'AlunoController.changeCatalogo')
     Route.post('/file/:id', 'AlunoController.uploadFile')
     Route.get('/aluno/:id', 'AlunoController.index')
+
+    Route.get('/aluno/:id/disciplina/:discId/matricular', 'AlunoController.matricular')
+    Route.get('/aluno/:id/disciplina/:discId/desmatricular', 'AlunoController.desmatricular')
 }).middleware(['auth', 'canAccess:adm,aluno,aux'])
 
 Route.post('/login', 'UserController.login')

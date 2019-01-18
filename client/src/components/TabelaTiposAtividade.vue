@@ -11,7 +11,6 @@
       <q-tr slot="body" slot-scope="props" 
             :props="props" class="linha-tabela"
       >
-        <q-td key="id" :props="props">{{ props.row.id }}</q-td>
         <q-td key="ordem" :props="props">{{ props.row.ordem }}</q-td>
         <q-td key="nome|descricao" :props="props">
           <div style="font-size: 115%; margin-bottom: 8px">
@@ -181,14 +180,6 @@ export default {
                 rowsPerPage: 0
             },
             columns: [
-                {
-                    name: 'id',
-                    required: true,
-                    label: 'ID',
-                    align: 'left',
-                    field: 'id',
-                    sortable: true
-                },
                 {
                     name: 'ordem',
                     required: true,

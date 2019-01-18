@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class File extends Model {
     static get hidden () {
-        return ['nome', 'path']
+        return ['path']
     }
     usuario () {
         return this.belongsTo('App/Models/User')

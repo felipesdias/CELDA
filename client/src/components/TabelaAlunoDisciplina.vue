@@ -25,6 +25,7 @@
         <div class="q-pb-md">
           <q-btn size="xs" 
                  round icon="fa fa-check" 
+                 :disable="!!value.finalizado"
                  :color="isSelected(disciplina) ? 'positive' : 'light'"
                  @click="matricular(disciplina)"/>
         </div>
@@ -47,7 +48,7 @@
         />
       </div>
       <div class="col column text-center">
-        <strong class="q-pb-sm">Horas Sujeridas</strong>
+        <strong class="q-pb-sm">Horas SuGeridas</strong>
         {{ getHS }}
       </div>
       <div class="col column text-center">
@@ -135,9 +136,13 @@ export default {
             const index = this.value.disciplinas.findIndex(item => item.id === disciplina.id);
 
             if(index === -1) {
-                this.value.disciplinas.push(disciplina);
+                this.$axios.get(`aluno/${this.$route.params.alunoId}/disciplina/${disciplina.id}/matricular`).then(() => {
+                    this.value.disciplinas.push(disciplina);
+                });
             } else {
-                this.value.disciplinas.splice(index, 1);
+                this.$axios.get(`aluno/${this.$route.params.alunoId}/disciplina/${disciplina.id}/desmatricular`).then(() => {
+                    this.value.disciplinas.splice(index, 1);
+                });
             }
         }
     }

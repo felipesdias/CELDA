@@ -15,12 +15,11 @@
             size="xs"
             round color="secondary"
             icon="fa fa-plus"
-            @click="criar.modal = true"/>
+            @click="abrirModalCriar"/>
         </div>
         <q-tr slot="body" slot-scope="props" 
               :props="props" class="linha-tabela"
         >
-          <q-td key="id" :props="props">{{ props.row.id }}</q-td>
           <q-td key="nome" :props="props">{{ props.row.nome }}</q-td>
           <q-td key="created_at" :props="props">{{ props.row.created | formatDate('DATE') }}</q-td>
           <q-td key="acoes" :props="props">
@@ -121,14 +120,6 @@ export default {
             },
             columns: [
                 {
-                    name: 'id',
-                    required: true,
-                    label: 'ID',
-                    align: 'left',
-                    field: 'id',
-                    sortable: true
-                },
-                {
                     name: 'nome',
                     required: true,
                     label: 'Nome',
@@ -183,6 +174,10 @@ export default {
         });
     },
     methods: {
+        abrirModalCriar() {
+            this.criar.modal = true;
+            this.criar.nome = '';
+        },
         detalheCatalogo(catalogo) {
             this.$router.push({ name: 'detalheCatalogo', params: { catalogoId: catalogo.id }});
         },

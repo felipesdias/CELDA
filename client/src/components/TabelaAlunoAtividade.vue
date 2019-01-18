@@ -23,6 +23,7 @@
           </div> -->
           <div slot="top-right" slot-scope="props">
             <q-btn  
+              v-if="!value.finalizado"
               size="xs"
               round color="secondary"
               icon="fa fa-plus"
@@ -32,7 +33,6 @@
                 :props="props" class="linha-tabela"
                 :class="[(props.row.confirmado ? 'confirmado' : '')]"
           >
-            <q-td key="id" :props="props">{{ props.row.id }}</q-td>
             <q-td key="nome" :props="props">
               <a v-if="props.row.comprovante" :href="props.row.comprovante.url" 
                  target="popup"
@@ -48,19 +48,19 @@
             <q-td key="carga_confirmada" :props="props">{{ props.row.carga_confirmada }}</q-td>
             <q-td key="created_at" :props="props">{{ props.row.created_at | formatDate('DATE') }}</q-td>
             <q-td key="acoes" :props="props">
-              <q-btn v-if="$can('adm,aux')"
+              <q-btn v-if="$can('adm,aux') && !value.finalizado"
                      size="xs" class="q-mr-sm"
                      round
                      :icon="props.row.confirmado ? 'fa fa-lock-open' : 'fa fa-lock'"
                      :color="props.row.confirmado ? 'negative' : 'positive'"
                      @click="confirmarAtividade(props.row)"/>
-              <q-btn v-show="!props.row.confirmado"
+              <q-btn v-if="!props.row.confirmado && !value.finalizado"
                      size="xs" class="q-mr-sm"
                      round color="primary"
                      icon="fa fa-edit"
                      :disable="!!props.row.confirmado"
                      @click="editarTipoAtividade(props.row)"/>
-              <q-btn v-show="!props.row.confirmado"
+              <q-btn v-if="!props.row.confirmado && !value.finalizado"
                      size="xs" 
                      round color="negative"
                      icon="fa fa-trash"
@@ -115,17 +115,17 @@
 
           <q-field v-if="$can('aluno')"
                    :error="$v.item.carga_sugerida.$error"
-                   :error-label="$utils.errorMsg('Horas Sujeridas', $v.item.carga_sugerida)">
+                   :error-label="$utils.errorMsg('Horas Sugeridas', $v.item.carga_sugerida)">
             <q-input v-model="item.carga_sugerida" 
                      type="number"
-                     float-label="Horas Sujeridas" 
+                     float-label="Horas Sugeridas" 
                      hide-underline
                      class="celda-input"
                      @blur="$v.item.carga_sugerida.$touch"
                      @keyup.enter="criarAtividade"/>
           </q-field>
 
-          <q-field v-if="$can('adm')"
+          <q-field v-if="$can('adm,aux')"
                    :error="$v.item.carga_planejada.$error"
                    :error-label="$utils.errorMsg('Horas Planejadas', $v.item.carga_planejada)">
             <q-input v-model="item.carga_planejada" 
@@ -254,14 +254,6 @@ export default {
             },
             columns: [
                 {
-                    name: 'id',
-                    required: true,
-                    label: 'ID',
-                    align: 'left',
-                    field: 'id',
-                    sortable: true
-                },
-                {
                     name: 'nome',
                     required: true,
                     label: 'Nome',
@@ -335,6 +327,12 @@ export default {
     methods: {
         confirmarAtividade(atividade) {
             if(atividade == null) {
+                this.$v.confirmar.$touch();
+                if (this.$v.confirmar.$error) {
+                    this.$q.notify('Verifique os campos novamente!');
+                    return;
+                }
+
                 atividade = this.confirmar.item;
                 this.$axios.put(`atividade/${atividade.id}/confirma`, { horas: this.confirmar.horas }).then(response => {
                     this.confirmar.modal = false;
@@ -344,10 +342,6 @@ export default {
 
                 });
             } else if(atividade.confirmado) {
-                if (this.$v.item.$error) {
-                    this.$q.notify('Verifique os campos novamente!');
-                    return;
-                }
                 this.$axios.put(`atividade/${atividade.id}/desconfirma`).then(response => {
                     const index = this.value.atividades.findIndex(item => item.id === response.id);
                     this.value.atividades.splice(index, 1, response);
@@ -477,7 +471,7 @@ export default {
             } else {
                 this.$axios.put(`atividade/${this.item.id}`, this.item).then(response => {
                     this.$q.notify({
-                        message: ` Número de atividades editadas: ${response}`,
+                        message: ' Número de atividades editadas: 1',
                         icon: 'fa fa-thumbs-up',
                         color: 'primary'
                     });
@@ -486,12 +480,8 @@ export default {
                     this.criar.modal = false;
                 
                     const index = this.value.atividades.findIndex(item => item.id === this.item.id);
-                    const novo = {
-                        ...cloneDeep(this.value.atividades[index]),
-                        ...this.item
-                    };
 
-                    this.value.atividades.splice(index, 1, novo);
+                    this.value.atividades.splice(index, 1, response);
                 }).catch(() => {
                     this.criar.loader = false;
                 });

@@ -12,7 +12,8 @@ class UserSchema extends Schema {
       table.string('matricula', 15).notNullable().unique()
       table.string('tipo', 20).notNullable().index()
       table.string('email', 254).notNullable().unique()
-      table.boolean('old').defaultTo(false)
+      table.boolean('old').defaultTo(false).index()
+      table.boolean('finalizado').defaultTo(false).index()
       table.timestamps()
     })
   }

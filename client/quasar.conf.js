@@ -78,7 +78,8 @@ module.exports = ctx => ({
             'QItemMain',
             'QItemSeparator',
             'QSelect',
-            'QUploader'
+            'QUploader',
+            'QCheckbox'
         ],
         directives: [
             'Ripple',

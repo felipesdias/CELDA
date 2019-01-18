@@ -10,7 +10,6 @@
       <q-tr slot="body" slot-scope="props" 
             :props="props" class="linha-tabela"
       >
-        <q-td key="id" :props="props">{{ props.row.id }}</q-td>
         <q-td key="nome" :props="props">{{ props.row.nome }}</q-td>
         <q-td key="creditos" :props="props">{{ props.row.creditos }}</q-td>
         <q-td key="acoes" :props="props">
@@ -129,14 +128,6 @@ export default {
                 rowsPerPage: 0
             },
             columns: [
-                {
-                    name: 'id',
-                    required: true,
-                    label: 'ID',
-                    align: 'left',
-                    field: 'id',
-                    sortable: true
-                },
                 {
                     name: 'nome',
                     required: true,

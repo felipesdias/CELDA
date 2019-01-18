@@ -12,6 +12,8 @@
       >
         <div slot="top-right" slot-scope="props" 
              class="row items-center">
+          <q-checkbox v-model="finalizado" label="Finalizados" 
+                      toggle-indeterminate class="q-mr-md q-pr-md" />
           <q-input v-model="buscaAluno" class="celda-input"
                    hide-underline float-label="Busca" 
           />
@@ -23,17 +25,31 @@
             @click="abrirModalCriar()"/>
         </div>
         <q-tr slot="body" slot-scope="props" 
-              :props="props" class="linha-tabela cursor-pointer"
-              @click.native="detalhesAluno(props.row)"
+              :props="props" class="linha-tabela"
+              :class="{ finalizado: props.row.finalizado }"
         >
           <q-td key="avatar" :props="props" >
             <img class="celda-avatar" :src="randomAvatar()">
           </q-td>
-          <q-td key="id" :props="props" >{{ props.row.id }}</q-td>
           <q-td key="nome" :props="props" >{{ props.row.nome }}</q-td>
           <q-td key="matricula" :props="props" >{{ props.row.matricula }}</q-td>
           <q-td key="email" :props="props" >{{ props.row.email }}</q-td>
+          <q-td key="old" :props="props">{{ props.row.old ? 'Sim' : 'Não' }}</q-td>
           <q-td key="created_at" :props="props" >{{ props.row.created_at | formatDate('DATE') }}</q-td>
+          <q-td key="acoes" :props="props" >
+            <q-btn size="xs" class="q-mr-sm"
+                   round
+                   :color="props.row.finalizado ? 'positive' : 'light'"
+                   icon="fa fa-check"
+                   :loading="props.row.loading"
+                   @click="finalizarAluno(props.row)"/>
+
+            <q-btn size="xs"
+                   round color="primary"
+                   icon="fa fa-edit"
+                   @click.native="detalhesAluno(props.row)"/>
+
+          </q-td>
         </q-tr>
       </q-table>
     </div>
@@ -85,7 +101,7 @@
             <q-select
               class="celda-input"
               filter
-              :display-value="aluno.catalogo.nome"
+              :display-value="catalogoNome"
               v-model="aluno.catalogo"
               :options="catalogos"
               autofocus-filter
@@ -121,6 +137,7 @@ export default {
     data() {
         return {
             catalogos: [],
+            finalizado: null,
             criar: {
                 modal: false,
                 criando: false,
@@ -131,7 +148,7 @@ export default {
                 email: null,
                 matricula: null,
                 catalogo_id: null,
-                catalogo: {}
+                catalogo: null
             },
             todosAlunos: [],
             buscaAluno: '',
@@ -150,16 +167,7 @@ export default {
                     sortable: false
                 },
                 {
-                    name: 'id',
-                    required: true,
-                    label: 'ID',
-                    align: 'left',
-                    field: 'id',
-                    sortable: true
-                },
-                {
                     name: 'nome',
-                    required: true,
                     label: 'Nome',
                     align: 'left',
                     field: 'nome',
@@ -180,11 +188,24 @@ export default {
                     sortable: false
                 },
                 {
+                    name: 'old',
+                    label: 'Old',
+                    align: 'left',
+                    field: 'old',
+                    sortable: true
+                },
+                {
                     name: 'created_at',
-                    required: true,
                     label: 'Criado em',
                     align: 'left',
                     field: 'created_at',
+                    sortable: true
+                },
+                {
+                    name: 'acoes',
+                    label: 'Ações',
+                    align: 'center',
+                    field: 'acoes',
                     sortable: true
                 }
             ]
@@ -209,7 +230,10 @@ export default {
     created() {
         this.carregando = true;
         this.$axios.get('aluno').then(response => {
-            this.todosAlunos = response;
+            this.todosAlunos = response.map(item => {
+                item.loading = false;
+                return item;
+            });
             this.carregando = false;
         }).catch(() => {
             this.carregando = false;
@@ -224,10 +248,22 @@ export default {
     },
     computed: {
         alunos() {
-            return this.todosAlunos.filter(aluno => aluno.nome.indexOf(this.buscaAluno) + aluno.matricula.indexOf(this.buscaAluno) > -2).slice(0, 30);
+            return this.todosAlunos.filter(aluno => (this.finalizado === null || !!aluno.finalizado === this.finalizado) && aluno.nome.indexOf(this.buscaAluno) + aluno.matricula.indexOf(this.buscaAluno) > -2).slice(0, 30);
+        },
+        catalogoNome() {
+            return (this.aluno.catalogo || {}).nome;
         }
     },
     methods: {
+        finalizarAluno(aluno) {
+            aluno.loading = true;
+            this.$axios.put(`aluno/${aluno.id}/finalizar`, { finalizado: !aluno.finalizado }).then(() => {
+                aluno.finalizado = !aluno.finalizado;
+                aluno.loading = false;
+            }).catch(() => {
+                aluno.loading = false;
+            });
+        },
         criarAluno() {
             this.criar.criando = true;
             this.aluno.catalogo_id = this.aluno.catalogo.id;
@@ -253,7 +289,7 @@ export default {
             this.aluno.email = null;
             this.aluno.matricula = null;
             this.aluno.catalogo_id = null;
-            this.aluno.catalogo = {};
+            this.aluno.catalogo = null;
             this.$v.$reset();
         },
         randomAvatar() {
@@ -274,5 +310,9 @@ export default {
 .celda-avatar {
     max-width: 100%;
     max-height: 100%;
+}
+
+.finalizado {
+    background: #e9ffe9;
 }
 </style>
