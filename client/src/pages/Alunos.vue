@@ -37,12 +37,14 @@
           <q-td key="old" :props="props">{{ props.row.old ? 'Sim' : 'Não' }}</q-td>
           <q-td key="created_at" :props="props" >{{ props.row.created_at | formatDate('DATE') }}</q-td>
           <q-td key="acoes" :props="props" >
-            <q-btn size="xs" class="q-mr-sm"
-                   round
-                   :color="props.row.finalizado ? 'positive' : 'light'"
-                   icon="fa fa-check"
-                   :loading="props.row.loading"
-                   @click="finalizarAluno(props.row)"/>
+            <q-btn 
+              v-if="$can('adm')"
+              size="xs" class="q-mr-sm"
+              round
+              :color="props.row.finalizado ? 'positive' : 'light'"
+              icon="fa fa-check"
+              :loading="props.row.loading"
+              @click="finalizarAluno(props.row)"/>
 
             <q-btn size="xs"
                    round color="primary"
