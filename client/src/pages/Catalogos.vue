@@ -94,8 +94,7 @@
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
-import moment from 'moment';
+import { required, minLength } from 'vuelidate/lib/validators';
 
 export default {
     name: 'Catalogos',

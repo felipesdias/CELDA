@@ -129,7 +129,7 @@ class AlunoController {
         const file_propriedades = {
             nome,
             path: `${Helpers.tmpPath('uploads')}\\`,
-            url: 'aaaaa',
+            url: `http://127.0.0.1:8080/uploads/${nome}`,
             user_id: params.id
         }
         

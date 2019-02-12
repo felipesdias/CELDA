@@ -25,7 +25,7 @@ class AtividadeController {
                 overwrite: true
             })
             comprovante.path = newPath
-            comprovante.url = 'NAO CONFIRMADO'
+            comprovante.url = `http://127.0.0.1:8080/alunos/${aluno.nome} - ${aluno.id}/not_confirmed/${comprovante.nome}`
             await comprovante.save()
         } else if(destino === 'CONFIRMADO') {
             const newPath = `${Helpers.tmpPath(`alunos\\${aluno.nome} - ${aluno.id}\\confirmed`)}\\`
@@ -34,7 +34,7 @@ class AtividadeController {
                 overwrite: true
             })
             comprovante.path = newPath
-            comprovante.url = 'CONFIRMADO'
+            comprovante.url = `http://127.0.0.1:8080/alunos/${aluno.nome} - ${aluno.id}/confirmed/${comprovante.nome}`
             await comprovante.save()
         }
 
@@ -164,7 +164,7 @@ class AtividadeController {
         
         await atividade.save()
         
-        atividade.comprovante = comprovanteDados
+        atividade.comprovante = comprovante
 
         return atividade
     }
